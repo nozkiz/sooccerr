@@ -1,0 +1,128 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+body {
+    font-family: 'Roboto', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #0d4c32;
+    color: #ffffff;
+    overflow: hidden; /* Hide any overflow caused by the side menu */
+}
+
+.logo {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+.logo img {
+    max-width: 150px;
+    height: auto;
+}
+
+.container {
+    text-align: center;
+    background-color: rgba(33, 33, 33, 0.9);
+    padding: 40px 50px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    border-radius: 15px;
+    border: 2px solid #0b6b3a;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+h1 {
+    margin-bottom: 25px;
+    color: #d4af37;
+    font-size: 32px;
+    font-weight: 700;
+}
+
+p {
+    color: #ffffff;
+    font-size: 18px;
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+.btn {
+    background-color: #0b6b3a;
+    color: #ffffff;
+    padding: 14px 28px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.btn:hover {
+    background-color: #d4af37;
+    color: #0d4c32;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+}
+
+.side-navbar {
+    position: fixed;
+    left: -250px; /* Initially hidden */
+    top: 0;
+    height: 100%;
+    width: 250px;
+    background-color: #0b6b3a;
+    padding: 1rem;
+    transition: left 0.3s ease;
+    z-index: 1000;
+}
+
+.side-navbar:hover {
+    left: 0; /* Slide in when hovered */
+}
+
+.hamburger-menu {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 30px;
+    height: 25px;
+    margin-bottom: 2rem;
+}
+
+.bar {
+    height: 3px;
+    width: 100%;
+    background-color: white;
+    transition: all 0.3s ease;
+}
+
+.nav-menu {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-menu li {
+    padding: 10px 0;
+}
+
+.nav-menu a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    transition: color 0.3s ease;
+}
+
+.nav-menu a:hover {
+    color: #d4af37;
+}

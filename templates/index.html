@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Troya FC - Pasión y Compromiso</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="./static/css/styles.css">
+    <style>
+        :root {
+            --primary-color: #27ae60;
+            --secondary-color: #2ecc71;
+            --background-color: #f8f9fa;
+            --text-color: #333;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+
+        .header {
+            background-color: var(--primary-color);
+            padding: 20px;
+            position: relative;
+        }
+
+        .header__container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .nav {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        .nav__list {
+            list-style: none;
+            display: flex;
+        }
+
+        .nav__item {
+            margin: 0 15px;
+        }
+
+        .nav__link {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .header__actions .btn {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .menu-toggle {
+            display: none; /* Ocultamos el botón de menú por defecto */
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        /* Estilos para pantallas pequeñas */
+        @media (max-width: 768px) {
+            .nav {
+                display: none; /* Ocultamos la navegación por defecto en móvil */
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                background-color: var(--primary-color);
+                width: 100%;
+                z-index: 1000;
+            }
+
+            .nav.open {
+                display: flex; /* Mostramos la navegación cuando se activa */
+            }
+
+            .menu-toggle {
+                display: block; /* Mostramos el botón de menú en móvil */
+            }
+        }
+
+        /* Otros estilos... */
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container header__container">
+            <div class="logo">
+                <img src="./static/media/que.png" alt="Troya FC Logo" class="logo__img">
+            </div>
+            <nav class="nav" id="navbar">
+                <ul class="nav__list">
+                    <li class="nav__item"><a href="{{ url_for('noticias') }}" class="nav__link">Noticias</a></li>
+                    <li class="nav__item"><a href="{{ url_for('galeria') }}" class="nav__link">Galería</a></li>
+                    <li class="nav__item"><a href="{{ url_for('torneos') }}" class="nav__link">Torneos</a></li>
+                    <li class="nav__item"><a href="{{ url_for('estadisticas_torneo') }}" class="nav__link">Estadisticas Torneos</a></li>
+                </ul>
+            </nav>
+            <div class="header__actions">
+                <a href="{{ url_for('login') }}" class="btn btn--primary">Iniciar sesión</a>
+            </div>
+            <button class="menu-toggle" id="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container hero__container">
+                <div class="hero__content">
+                    <h1 class="hero__title">SOFTCCER F.C Pasión, compromiso, victoria.</h1>
+                    <p class="hero__text">Formamos jóvenes talentos con valores fundamentales para la vida, dentro y fuera del campo. Nuestra escuela de fútbol es un referente en la formación de deportistas comprometidos.</p>
+                    <a href="{{ url_for('quien') }}" class="btn btn--secondary">Conócenos más</a>
+                </div>
+                <div class="hero__media">
+                    <video src="./static/media/gol.mp4" autoplay loop muted class="hero__video"></video>
+                </div>
+            </div>
+        </section>
+
+        <section class="banner">
+            <div class="container banner__container">
+                <div class="banner__icon">
+                    <img src="./static/media/que.png" alt="Troya FC Logo" class="banner__img">
+                </div>
+                <div class="banner__content">
+                    <h2 class="banner__title">SOFTCCER F.C</h2>
+                    <p class="banner__text">Más que un equipo, una familia. Cultivamos el respeto, el trabajo en equipo y la disciplina para formar deportistas integrales y comprometidos.</p>
+                </div>
+                <div class="banner__icon">
+                    <img src="./static/media/pngegg.png" alt="Football Icon" class="banner__img">
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer__container">
+            <div class="footer__social">
+                <a href="https://www.facebook.com/TroyafutbolClub" target="_blank" class="footer__social-link">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="https://www.instagram.com/troyafutbolclub/" target="_blank" class="footer__social-link">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </div>
+            <p class="footer__text">&copy; 2024 Softccer F.C Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        const menuToggle = document.getElementById('menu-toggle');
+        const navbar = document.getElementById('navbar');
+
+        menuToggle.addEventListener('click', () => {
+            navbar.classList.toggle('open'); // Cambiamos la clase para mostrar/ocultar el menú
+        });
+    </script>
+    <script src="./static/js/script.js"></script>
+</body>
+</html>

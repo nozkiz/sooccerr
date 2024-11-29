@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - Troya FC</title>
+    <style>
+        :root {
+            --primary-color: #27ae60;
+            --secondary-color: #2ecc71;
+            --dark-green: #219653;
+            --light-green: #6FCF97;
+            --bg-dark: #1a1a1a;
+            --text-gray: #e0e0e0;
+            --error-color: #ff6347;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: radial-gradient(circle at center, var(--bg-dark) 0%, #000 100%);
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 400px;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 2rem;
+            display: block;
+            filter: drop-shadow(0 0 10px rgba(46, 204, 113, 0.3));
+        }
+
+        h2 {
+            color: #fff;
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-gray);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(39, 174, 96, 0.1);
+        }
+
+        .password-strength {
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--text-gray);
+        }
+
+        .password-strength.weak { color: var(--error-color); }
+        .password-strength.medium { color: #ffd700; }
+        .password-strength.strong { color: var(--primary-color); }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary-color);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .submit-btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .message {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+
+        .message a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .message a:hover {
+            color: var(--light-green);
+            text-decoration: underline;
+        }
+
+        .volver-inicio {
+            display: inline-block;
+            background-color: transparent;
+            color: var(--text-gray);
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 6px;
+            margin-top: 2rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .volver-inicio:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            border-color: var(--primary-color);
+        }
+
+        .flash-message {
+            width: 100%;
+            max-width: 400px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .flash-message.error {
+            background-color: rgba(255, 99, 71, 0.1);
+            border: 1px solid #ff6347;
+            color: #ff6347;
+        }
+
+        .flash-message.success {
+            background-color: rgba(46, 204, 113, 0.1);
+            border: 1px solid var(--primary-color);
+            color: var(--secondary-color);
+        }
+
+        .error-message {
+            color: var(--error-color);
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="Troya FC Logo" class="logo">
+        <h2>Crear cuenta</h2>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" id="registerForm" onsubmit="return validateForm(event)">
+            <div class="form-group">
+                <label for="email">Correo electrónico</label>
+                <input type="email" id="email" name="email" required autocomplete="email">
+                <div class="error-message" id="emailError"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Contraseña</label>
+                <input type="password" id="password" name="password" required autocomplete="new-password">
+                <div class="password-strength" id="passwordStrength"></div>
+                <div class="error-message" id="passwordError"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="confirm_password">Confirmar Contraseña</label>
+                <input type="password" id="confirm_password" name="confirm_password" required autocomplete="new-password">
+                <div class="error-message" id="confirmPasswordError"></div>
+            </div>
+
+            <button type="submit" class="submit-btn">Crear cuenta</button>
+        </form>
+
+        <div class="message">
+            <p>¿Ya tienes una cuenta? <a href="{{ url_for('login') }}">Inicia sesión</a></p>
+        </div>
+    </div>
+
+    <a href="{{ url_for('index') }}" class="volver-inicio">Volver al inicio</a>
+
+    <script>
+        function validatePassword(password) {
+            const minLength = 8;
+            const hasUpperCase = /[A-Z]/.test(password);
+            const hasLowerCase = /[a-z]/.test(password);
+            const hasNumbers = /\d/.test(password);
+            const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+            
+            let strength = 0;
+            if (password.length >= minLength) strength++;
+            if (hasUpperCase && hasLowerCase) strength++;
+            if (hasNumbers) strength++;
+            if (hasSpecialChar) strength++;
+
+            return strength;
+        }
+
+        function updatePasswordStrength(password) {
+            const strengthDiv = document.getElementById('passwordStrength');
+            const strength = validatePassword(password);
+            
+            if (password.length === 0) {
+                strengthDiv.textContent = '';
+                strengthDiv.className = 'password-strength';
+                return;
+            }
+
+            switch(strength) {
+                case 1:
+                    strengthDiv.textContent = 'Contraseña débil';
+                    strengthDiv.className = 'password-strength weak';
+                    break;
+                case 2:
+                    strengthDiv.textContent = 'Contraseña media';
+                    strengthDiv.className = 'password-strength medium';
+                    break;
+                case 3:
+                    strengthDiv.textContent = 'Contraseña fuerte';
+                    strengthDiv.className = 'password-strength strong';
+                    break;
+                case 4:
+                    strengthDiv.textContent = 'Contraseña muy fuerte';
+                    strengthDiv.className = 'password-strength strong';
+                    break;
+                default:
+                    strengthDiv.textContent = 'Contraseña muy débil';
+                    strengthDiv.className = 'password-strength weak';
+            }
+        }
+
+        function validateForm(event) {
+            event.preventDefault();
+            let isValid = true;
+            
+            // Reset error messages
+            document.querySelectorAll('.error-message').forEach(el => {
+                el.style.display = 'none';
+                el.textContent = '';
+            });
+
+            // Email validation
+            const email = document.getElementById('email').value;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                document.getElementById('emailError').textContent = 'Por favor, ingresa un email válido';
+                document.getElementById('emailError').style.display = 'block';
+                isValid = false;
+            }
+
+            // Password validation
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm_password').value;
+            
+            if (validatePassword(password) < 2) {
+                document.getElementById('passwordError').textContent = 'La contraseña debe tener al menos 8 caracteres, incluir mayúsculas, minúsculas y números';
+                document.getElementById('passwordError').style.display = 'block';
+                isValid = false;
+            }
+
+            if (password !== confirmPassword) {
+                document.getElementById('confirmPasswordError').textContent = 'Las contraseñas no coinciden';
+                document.getElementById('confirmPasswordError').style.display = 'block';
+                isValid = false;
+            }
+
+            if (isValid) {
+                document.getElementById('registerForm').submit();
+            }
+
+            return false;
+        }
+
+        // Add event listeners
+        document.getElementById('password').addEventListener('input', (e) => {
+            updatePasswordStrength(e.target.value);
+        });
+    </script>
+</body>
+</html>

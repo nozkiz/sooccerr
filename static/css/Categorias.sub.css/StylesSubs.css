@@ -1,0 +1,93 @@
+/* Estilos generales */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4; /* Fondo gris claro para contraste */
+}
+
+/* Contenedor principal */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Encabezado */
+.header {
+    background-color: #000; /* Fondo negro para el encabezado */
+    color: #fff; /* Texto blanco */
+    padding: 20px;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilo de los títulos */
+.header h1 {
+    margin: 0;
+    font-size: 2.5em;
+}
+
+/* Categorías */
+.categories {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px 0;
+}
+
+.category {
+    background-color: #fff; /* Fondo blanco para las categorías */
+    border: 2px solid #000; /* Borde negro */
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 30%;
+    text-align: center;
+}
+
+.category:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.category-img {
+    width: 100%;
+    height: auto;
+    border-bottom: 2px solid #000;
+}
+
+.category h2 {
+    background-color: #31df37; /* Verde para el título */
+    color: #fff;
+    margin: 0;
+    padding: 10px;
+    font-size: 1.5em;
+}
+
+/* Enlace de categoría */
+.category-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Botón de regresar */
+.back-button {
+    display: inline-block;
+    background-color: #31df37; /* Verde para el botón */
+    color: #fff;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1.2em;
+    text-align: center;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+    background-color: #31df37 /* Verde más oscuro en hover */
+}

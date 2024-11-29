@@ -1,0 +1,105 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f8f8;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+}
+
+.header-logo img {
+    height: 50px;
+    margin-bottom: 10px;
+}
+
+h1 {
+    margin: 0;
+    font-size: 24px;
+    letter-spacing: 2px;
+    color: #ffffff;
+}
+
+main {
+    padding: 20px;
+}
+
+.torneos {
+    background-color: #fff;
+    border: 2px solid #098031;
+    border-radius: 5px;
+    padding: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.torneos h2 {
+    text-align: center;
+    font-size: 22px;
+    color: #098031;
+    border-bottom: 2px solid #098031;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.torneos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.torneo-card {
+    background-color: #333;
+    color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.torneo-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.torneo-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+}
+
+.torneo-info {
+    padding: 15px;
+    text-align: center;
+}
+
+.torneo-info h3 {
+    margin: 0;
+    font-size: 20px;
+    color: #098031;
+}
+
+.torneo-info p {
+    font-size: 14px;
+    margin: 10px 0;
+}
+
+.torneo-info button {
+    background-color: #098031;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.torneo-info button:hover {
+    background-color: #fff;
+    color: #098031;
+}

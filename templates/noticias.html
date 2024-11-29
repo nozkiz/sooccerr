@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Últimas noticias del Troya FC - Mantente informado sobre tu equipo favorito">
+    <title>Noticias - Troya FC</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #27ae60;
+            --primary-hover: #2ecc71;
+            --dark: #000;
+            --light: #fff;
+            --bg-color: #f4f4f4;
+            --text-color: #333;
+            --transition: 0.3s ease;
+            --shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--dark);
+            color: var(--light);
+            padding: 20px 10%;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            transition: transform var(--transition);
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo img {
+            height: 120px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+        }
+
+        h1 {
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            color: var(--primary-color);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .carousel-container {
+            position: relative;
+            max-width: 800px;
+            margin: 2rem auto;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+
+        .carousel {
+            display: flex;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .carousel-item {
+            min-width: 100%;
+            position: relative;
+            aspect-ratio: 16/9;
+            overflow: hidden;
+        }
+
+        .carousel-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform var(--transition);
+        }
+
+        .carousel-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            color: var(--light);
+            padding: 2rem 1.5rem;
+            transform: translateY(0);
+            transition: transform var(--transition);
+        }
+
+        .overlay h3 {
+            margin: 0;
+            font-size: 1.5em;
+            color: var(--primary-color);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .overlay p {
+            margin-top: 0.5rem;
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .carousel-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.6);
+            color: var(--light);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .carousel-button:hover,
+        .carousel-button:focus {
+            background-color: var(--primary-color);
+            outline: none;
+        }
+
+        .carousel-button.prev {
+            left: 1rem;
+        }
+
+        .carousel-button.next {
+            right: 1rem;
+        }
+
+        .carousel-indicators {
+            position: absolute;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 0.5rem;
+            z-index: 10;
+        }
+
+        .indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .indicator.active {
+            background: var(--primary-color);
+            transform: scale(1.2);
+        }
+
+        footer {
+            background-color: var(--dark);
+            color: var(--light);
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: var(--light);
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+
+        .btn:hover,
+        .btn:focus {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+        }
+
+        .btn:focus {
+            outline: none;
+            border-color: var(--primary-hover);
+        }
+    </style>
+</head>
+<body>
+    <header role="banner">
+        <div class="header-container">
+            <div class="logo">
+                <img src="./static/media/que.png" alt="Troya FC Logo" width="120" height="120">
+            </div>
+            <h1>Últimas Noticias</h1>
+        </div>
+    </header>
+
+    <main id="main-content" role="main">
+        <div class="carousel-container">
+            <div class="carousel" role="region" aria-label="Carrusel de noticias">
+                {% for noticia in noticias %}
+                <div class="carousel-item" role="group" aria-roledescription="slide" aria-label="Noticia {{ loop.index }} de {{ noticias|length }}">
+                    <img src="{{ url_for('static', filename='media/' + noticia['imagen']) }}" 
+                         alt="{{ noticia['titulo'] }}"
+                         loading="lazy">
+                    <div class="overlay">
+                        <h3>{{ noticia['titulo'] }}</h3>
+                        <p>{{ noticia['descripcion'] }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <button class="carousel-button prev" aria-label="Noticia anterior" onclick="moveCarousel(-1)">&#10094;</button>
+            <button class="carousel-button next" aria-label="Siguiente noticia" onclick="moveCarousel(1)">&#10095;</button>
+            <div class="carousel-indicators" role="tablist">
+                {% for _ in noticias %}
+                <button class="indicator" role="tab" aria-label="Ir a noticia {{ loop.index }}" onclick="goToSlide({{ loop.index0 }})"></button>
+                {% endfor %}
+            </div>
+        </div>
+    </main>
+
+    <footer role="contentinfo">
+        <a href="{{ url_for('index') }}" class="btn">Volver al Inicio</a>
+    </footer>
+
+    <script>
+        let currentIndex = 0;
+        const carousel = document.querySelector('.carousel');
+        const items = document.querySelectorAll('.carousel-item');
+        const indicators = document.querySelectorAll('.indicator');
+        const totalItems = items.length;
+        let autoplayInterval;
+
+        function updateIndicators() {
+            indicators.forEach((indicator, index) => {
+                indicator.classList.toggle('active', index === currentIndex);
+                indicator.setAttribute('aria-selected', index === currentIndex);
+            });
+        }
+
+        function moveCarousel(direction) {
+            currentIndex = (currentIndex + direction + totalItems) % totalItems;
+            updateCarousel();
+        }
+
+        function goToSlide(index) {
+            currentIndex = index;
+            updateCarousel();
+        }
+
+        function updateCarousel() {
+            carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
+            updateIndicators();
+            resetAutoplay();
+        }
+
+        function startAutoplay() {
+            autoplayInterval = setInterval(() => {
+                moveCarousel(1);
+            }, 5000);
+        }
+
+        function resetAutoplay() {
+            clearInterval(autoplayInterval);
+            startAutoplay();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCarousel();
+            startAutoplay();
+        });
+    </script>
+</body>
+</html>

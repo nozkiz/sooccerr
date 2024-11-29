@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Panel de Administración Troya">
+    <meta name="theme-color" content="#27ae60">
+    <title>Panel de Administración - Troya</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #27ae60;
+            --secondary-color: #2ecc71;
+            --background-dark: #1a1a1a;
+            --background-light: #2c2c2c;
+            --text-color: #ffffff;
+            --danger-color: #e74c3c;
+            --transition-speed: 0.3s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--background-dark);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .logo {
+            text-align: center;
+            padding: 20px;
+            background: #000;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .logo img {
+            width: 120px;
+            height: auto;
+            transition: transform var(--transition-speed) ease;
+            object-fit: contain;
+        }
+
+        .logo img:hover {
+            transform: scale(1.1);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 40px;
+            background: var(--background-light);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        p {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: fit-content;
+            margin: 20px auto;
+            padding: 15px 30px;
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all var(--transition-speed) ease;
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.4);
+            cursor: pointer;
+            border: none;
+            font-size: 1em;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(46, 204, 113, 0.6);
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+        }
+
+        .side-navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 250px;
+            background: #000;
+            padding-top: 80px;
+            transition: transform var(--transition-speed) ease;
+            z-index: 1000;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary-color) #000;
+        }
+
+        .side-navbar::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .side-navbar::-webkit-scrollbar-track {
+            background: #000;
+        }
+
+        .side-navbar::-webkit-scrollbar-thumb {
+            background-color: var(--primary-color);
+            border-radius: 4px;
+        }
+
+        .side-navbar.closed {
+            transform: translateX(-250px);
+        }
+
+        .nav-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: var(--primary-color);
+            color: var(--text-color);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.5em;
+            cursor: pointer;
+            z-index: 1001;
+            transition: all var(--transition-speed) ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-toggle:hover {
+            background: var(--secondary-color);
+            transform: rotate(90deg);
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-menu li {
+            padding: 0;
+            border-bottom: 1px solid #333;
+        }
+
+        .nav-menu a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 1.1em;
+            display: block;
+            padding: 15px 20px;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .nav-menu a:hover {
+            color: var(--primary-color);
+            background: rgba(39, 174, 96, 0.1);
+            padding-left: 30px;
+        }
+
+        .nav-menu i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1002;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal-content {
+            background-color: var(--background-light);
+            margin: 15% auto;
+            padding: 30px;
+            border: 1px solid #888;
+            width: min(90%, 300px);
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            transform: scale(0.9);
+            transition: transform var(--transition-speed) ease;
+        }
+
+        .modal.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 25px;
+        }
+
+        .modal-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all var(--transition-speed) ease;
+            min-width: 120px;
+        }
+
+        .confirm-btn {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .confirm-btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .cancel-btn {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .cancel-btn:hover {
+            background-color: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        .logout-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .modal-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 20px;
+                padding: 20px;
+            }
+
+            .btn {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            .modal-buttons {
+                flex-direction: column;
+            }
+
+            .modal-btn {
+                width: 100%;
+            }
+
+            .nav-toggle {
+                top: 10px;
+                left: 10px;
+                width: 40px;
+                height: 40px;
+                font-size: 1.2em;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="logo">
+        <img src="./static/media/logo1.png" alt="Logo Troya">
+    </div>
+    
+    <button class="nav-toggle" id="navToggle" aria-label="Alternar menú de navegación">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <nav class="side-navbar" id="sideNav">
+        <ul class="nav-menu">
+            <li><a href="{{ url_for('subs') }}"><i class="fas fa-file-alt"></i>Plantillas</a></li>
+            <li><a href="{{ url_for('noticias_admin') }}"><i class="fas fa-newspaper"></i>Noticias</a></li>
+            <li><a href="{{ url_for('galeria_admin') }}"><i class="fas fa-images"></i>Galería</a></li>
+            <li><a href="{{ url_for('torneos_admin') }}"><i class="fas fa-trophy"></i>Torneos</a></li>
+            <li><a href="{{ url_for('estadisticas_torneo_admin') }}"><i class="fas fa-chart-bar"></i>Estadísticas</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h1>Bienvenido, Administrador</h1>
+        <p>¿Qué deseas hacer hoy?</p>
+        <button class="btn" id="logoutBtn">
+            <i class="fas fa-sign-out-alt"></i>
+            <span style="margin-left: 8px;">Cerrar Sesión</span>
+        </button>
+    </div>
+
+    <div id="logoutModal" class="modal">
+        <div class="modal-content">
+            <h2 style="color: var(--primary-color); margin-bottom: 15px;">Confirmar Cierre</h2>
+            <p>¿Estás seguro que quieres cerrar sesión?</p>
+            <div class="modal-buttons">
+                <button class="modal-btn confirm-btn" id="confirmLogout">
+                    <span>Sí, cerrar sesión</span>
+                    <span class="logout-spinner" style="display: none;"></span>
+                </button>
+                <button class="modal-btn cancel-btn" id="cancelLogout">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navToggle = document.getElementById('navToggle');
+            const sideNav = document.getElementById('sideNav');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const logoutModal = document.getElementById('logoutModal');
+            const confirmLogout = document.getElementById('confirmLogout');
+            const cancelLogout = document.getElementById('cancelLogout');
+
+            const toggleNav = () => {
+                sideNav.classList.toggle('closed');
+                navToggle.classList.toggle('active');
+            };
+
+            const showModal = () => {
+                logoutModal.style.display = 'block';
+                setTimeout(() => logoutModal.classList.add('active'), 10);
+            };
+
+            const hideModal = () => {
+                logoutModal.classList.remove('active');
+                setTimeout(() => logoutModal.style.display = 'none', 300);
+            };
+
+            const handleLogout = async () => {
+                const spinner = confirmLogout.querySelector('.logout-spinner');
+                const textSpan = confirmLogout.querySelector('span:not(.logout-spinner)');
+                
+                try {
+                    spinner.style.display = 'inline-block';
+                    textSpan.style.opacity = '0.7';
+                    confirmLogout.disabled = true;
+                    cancelLogout.disabled = true;
+
+                    // Simular petición al servidor
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                    
+                    // Limpiar datos de sesión
+                    localStorage.clear();
+                    sessionStorage.clear();
+                    
+                    // Eliminar todas las cookies
+                    document.cookie.split(";").forEach(cookie => {
+                        const name = cookie.split("=")[0].trim();
+                        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+                    });
+
+                    window.location.href = '{{ url_for('index') }}';
+                } catch (error) {
+                    console.error('Error al cerrar sesión:', error);
+                    alert('Hubo un problema al cerrar sesión. Por favor, intenta de nuevo.');
+                    
+                    spinner.style.display = 'none';
+                    textSpan.style.opacity = '1';
+                    confirmLogout.disabled = false;
+                    cancelLogout.disabled = false;
+                }
+            };
+
+            // Event Listeners
+            navToggle.addEventListener('click', toggleNav);
+            logoutBtn.addEventListener('click', showModal);
+            cancelLogout.addEventListener('click', hideModal);
+            confirmLogout.addEventListener('click', handleLogout);
+
+            // Cerrar menú al hacer clic fuera
+            document.addEventListener('click', (event) => {
+                if (!sideNav.contains(event.target) && 
+                    !navToggle.contains(event.target) && 
+                    !sideNav.classList.contains('closed')) {
+                    toggleNav();
+                }
+            });
+
+            // Cerrar modal al hacer clic fuera
+            window.addEventListener('click', (event) => {
+                if (event.target === logoutModal) {
+                    hideModal();}
+                });
+    
+                // Manejar tecla Escape
+                document.addEventListener('keydown', (event) => {
+                    if (event.key === 'Escape') {
+                        if (logoutModal.style.display === 'block') {
+                            hideModal();
+                        } else if (!sideNav.classList.contains('closed')) {
+                            toggleNav();
+                        }
+                    }
+                });
+    
+                // Inicializar el estado del menú
+                if (window.innerWidth <= 768) {
+                    sideNav.classList.add('closed');
+                }
+    
+                // Ajustar menú en cambio de tamaño de ventana
+                window.addEventListener('resize', () => {
+                    if (window.innerWidth <= 768 && !sideNav.classList.contains('closed')) {
+                        sideNav.classList.add('closed');
+                    }
+                });
+            });
+        </script>
+    </body>
+    </html>

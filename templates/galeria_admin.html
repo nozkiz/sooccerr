@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sistema de administración de galería para Troya FC">
+    <title>Gestión de Galería | Troya FC</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #27ae60;
+            --secondary-color: #2ecc71;
+            --text-color: #333;
+            --background-color: #f9f9f9;
+            --white: #ffffff;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header {
+            background: var(--primary-color);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            max-height: 60px;
+            margin-right: 1rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--secondary-color);
+        }
+
+        .main-content {
+            padding: 2rem 0;
+        }
+
+        .section {
+            background: var(--white);
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        h1, h2 {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        input[type="text"],
+        textarea,
+        input[type="file"] {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e1e1e1;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        input[type="text"]:focus,
+        textarea:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.1);
+        }
+
+        .file-upload {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-upload-label {
+            display: block;
+            padding: 1rem;
+            background: #f8f9fa;
+            border: 2px dashed #ddd;
+            border-radius: 6px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .file-upload-label:hover {
+            border-color: var(--primary-color);
+            background: #f0f7f4;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: var(--white);
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+            color: var(--white);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+            background: var(--secondary-color);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .gallery-item {
+            background: var(--white);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .gallery-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .gallery-info {
+            padding: 1rem;
+        }
+
+        .gallery-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: #f8f9fa;
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 2rem;
+            border-radius: 6px;
+            background: var(--white);
+            box-shadow: var(--shadow);
+            z-index: 1000;
+            display: none;
+        }
+
+        .toast.success {
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .toast.error {
+            border-left: 4px solid #e74c3c;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .logo img {
+                margin: 0 0 1rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container header-content">
+            <div class="logo">
+                <img src="{{ url_for('static', filename='media/que.png') }}" alt="Troya FC Logo">
+                <h1 style="color: var(--white)">Troya FC</h1>
+            </div>
+            <nav class="nav-links">
+                <a href="{{ url_for('bienvenido') }}">Volver</a>
+            
+            </nav>
+        </div>
+    </header>
+
+    <main class="container main-content">
+        <section class="section">
+            <div class="section-header">
+                <h2><i class="fas fa-plus-circle"></i> Agregar Nueva Imagen</h2>
+            </div>
+            <form action="{{ url_for('galeria_admin') }}" method="post" enctype="multipart/form-data" id="addGalleryForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="titulo">Título:</label>
+                        <input type="text" id="titulo" name="titulo" required placeholder="Ingrese el título">
+                    </div>
+                    <div class="form-group">
+                        <label for="descripcion">Descripción:</label>
+                        <textarea id="descripcion" name="descripcion" required placeholder="Ingrese la descripción"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="imagen">Imagen:</label>
+                    <div class="file-upload">
+                        <label class="file-upload-label">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <span id="fileName">Seleccionar imagen</span>
+                            <input type="file" id="imagen" name="imagen" required accept="image/*" style="display: none;">
+                        </label>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary" name="add_galeria">
+                    <i class="fas fa-plus"></i> Agregar Imagen
+                </button>
+            </form>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <h2><i class="fas fa-images"></i> Galería Actual</h2>
+                <div class="gallery-controls">
+                    <input type="text" id="searchGallery" placeholder="Buscar..." style="padding: 0.5rem; margin-right: 1rem;">
+                    <select id="sortGallery" style="padding: 0.5rem;">
+                        <option value="newest">Más recientes</option>
+                        <option value="oldest">Más antiguos</option>
+                        <option value="title">Por título</option>
+                    </select>
+                </div>
+            </div>
+            <div class="gallery-grid">
+                {% for galeria in galeria %}
+                <div class="gallery-item">
+                    <img src="{{ url_for('static', filename='media/' + galeria[3]) }}" 
+                         alt="{{ galeria[1] }}" 
+                         class="gallery-image">
+                    <div class="gallery-info">
+                        <h3>{{ galeria[1] }}</h3>
+                        <p>{{ galeria[2] }}</p>
+                    </div>
+                    <div class="gallery-actions">
+                        <button class="btn btn-primary edit-btn" data-id="{{ galeria[0] }}">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <form action="{{ url_for('galeria_admin') }}" method="post" style="display: inline;">
+                            <input type="hidden" name="galeria_id" value="{{ galeria[0] }}">
+                            <button type="submit" class="btn btn-danger" name="delete_galeria"
+                                    onclick="return confirm('¿Está seguro de eliminar esta imagen?')">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+
+    <div id="toast" class="toast"></div>
+
+    <script>
+        // File upload preview
+        document.getElementById('imagen').addEventListener('change', function(e) {
+            const fileName = e.target.files[0]?.name || 'Seleccionar imagen';
+            document.getElementById('fileName').textContent = fileName;
+        });
+
+        // Search functionality
+        document.getElementById('searchGallery').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const galleryItems = document.querySelectorAll('.gallery-item');
+            
+            galleryItems.forEach(item => {
+                const title = item.querySelector('h3').textContent.toLowerCase();
+                const description = item.querySelector('p').textContent.toLowerCase();
+                const isVisible = title.includes(searchTerm) || description.includes(searchTerm);
+                item.style.display = isVisible ? 'block' : 'none';
+            });
+        });
+
+        // Sort functionality
+        document.getElementById('sortGallery').addEventListener('change', function(e) {
+            const sortValue = e.target.value;
+            const galleryGrid = document.querySelector('.gallery-grid');
+            const galleryItems = Array.from(document.querySelectorAll('.gallery-item'));
+
+            galleryItems.sort((a, b) => {
+                const titleA = a.querySelector('h3').textContent.toLowerCase();
+                const titleB = b.querySelector('h3').textContent.toLowerCase();
+                
+                switch(sortValue) {
+                    case 'title':
+                        return titleA.localeCompare(titleB);
+                    case 'newest':
+                        return -1; // Assuming newest are first
+                    case 'oldest':
+                        return 1;  // Reverse the order
+                    default:
+                        return 0;
+                }
+            });
+
+            galleryGrid.innerHTML = '';
+            galleryItems.forEach(item => galleryGrid.appendChild(item));
+        });
+
+        // Toast notifications
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${type}`;
+            toast.style.display = 'block';
+            
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+
+        // Form validation
+        document.getElementById('addGalleryForm').addEventListener('submit', function(e) {
+            const titulo = document.getElementById('titulo').value;
+            const descripcion = document.getElementById('descripcion').value;
+            const imagen = document.getElementById('imagen').files[0];
+
+            if (!titulo || !descripcion || !imagen) {
+                e.preventDefault();
+                showToast('Por favor complete todos los campos', 'error');
+                return;
+            }
+
+            const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+            if (!allowedTypes.includes(imagen.type)) {
+                e.preventDefault();
+                showToast('Por favor seleccione un archivo de imagen válido', 'error');
+                return;
+            }
+        });
+
+        // Help modal
+        document.getElementById('helpBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('Ayuda:\n\n1. Para agregar una imagen, complete el formulario superior\n2. Para eliminar una imagen, use el botón rojo con el ícono de basura\n3. Use el buscador para filtrar imágenes\n4. Use el selector para ordenar la galería');
+        });
+    </script>
+</body>
+</html>

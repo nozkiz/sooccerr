@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles del Jugador</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Estilos generales */
+        :root {
+            --primary-color: #27ae60;
+            --secondary-color: #2ecc71;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        header {
+            background-color: #000;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 20px;
+        }
+
+        .left-column, .right-column {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            margin: 10px;
+        }
+
+        .left-column {
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .right-column {
+            flex: 2;
+            max-width: 800px;
+        }
+
+        img {
+            border-radius: 8px;
+            border: 2px solid var(--primary-color);
+        }
+
+        h2 {
+            color: var(--primary-color);
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        input[type="number"], input[type="file"] {
+            width: calc(100% - 22px);
+            padding: 8px;
+            margin-top: 5px;
+            border: 2px solid var(--primary-color);
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        canvas {
+            max-width: 100%;
+            height: auto;
+            margin-top: 20px;
+        }
+
+        .rendimiento-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .rendimiento-circulo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 0 auto;
+            position: relative;
+            background: #f0f0f0;
+            overflow: hidden;
+        }
+
+        .rendimiento-circulo::before {
+            content: attr(data-puntaje);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            font-weight: bold;
+            z-index: 2;
+        }
+
+        .rendimiento-circulo::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: conic-gradient(var(--color) var(--angulo), transparent 0);
+            z-index: 1;
+        }
+
+        .rendimiento-calificacion {
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        /* Estilo general para el enlace */
+ul li a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #333;
+    transition: color 0.3s ease;
+}
+
+ul li a:hover {
+    color: var(--primary-color);
+}
+
+/* Estilo para el botón de ícono */
+.icon-btn {
+    margin-left: 10px;
+    background-color: #e74c3c; /* Color rojo característico de PDF */
+    color: #fff;
+    padding: 5px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+}
+
+.icon-btn i {
+    font-size: 16px; /* Tamaño del ícono */
+}
+
+.icon-btn:hover {
+    background-color: #c0392b; /* Cambia a un rojo más oscuro en hover */
+}
+button, .back-button {
+    background-color: var(--primary-color);
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-top: 10px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+button:hover, .back-button:hover {
+    background-color: var(--secondary-color);
+}
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Detalles de {{ jugador.nombre }}</h1>
+        <a href="{{ url_for('sub18') }}" class="back-button">Volver a sub 18</a>
+    </header>
+
+    <div class="container">
+        <!-- Columna derecha con gráfica -->
+        <div class="right-column">
+            <h2>Estadísticas del Jugador</h2>
+            <canvas id="estadisticasChart"></canvas>
+
+            <script>
+                const ctx = document.getElementById('estadisticasChart').getContext('2d');
+                const estadisticasChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: [
+                            {% if jugador.posicion == 'Arquero' %}
+                            'Partidos Jugados', 'Goles Recibidos', 'Intercepciones', 'Tarjetas Amarillas', 'Tarjetas Rojas'
+                            {% else %}
+                            'Partidos Jugados', 'Goles', 'Asistencias', 'Goles sin Penalti', 'Tarjetas Amarillas', 'Tarjetas Rojas'
+                            {% endif %}
+                        ],
+                        datasets: [{
+                            label: 'Estadísticas',
+                            data: [
+                                {{ jugador.partidos_jugados }},
+                                {% if jugador.posicion == 'Arquero' %}
+                                {{ jugador.goles_recibidos }}, {{ jugador.intercepciones }}, {{ jugador.tarjetas_amarillas }}, {{ jugador.tarjetas_rojas }}
+                                {% else %}
+                                {{ jugador.goles }}, {{ jugador.asistencias }}, {{ jugador.goles_sin_penalti }}, {{ jugador.tarjetas_amarillas }}, {{ jugador.tarjetas_rojas }}
+                                {% endif %}
+                            ],
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(255, 159, 64, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+
+            </script>
+            <<div class="container">
+                {% if jugador.posicion == 'Arquero' %}
+                <form action="{{ url_for('actualizar_estadisticas_sub18', id=jugador.id) }}" method="POST">
+                    <input type="hidden" name="posicion" value="Arquero">
+                    <label for="partidos_jugados">Partidos Jugados:</label>
+                    <input type="number" name="partidos_jugados" value="{{ jugador.partidos_jugados }}" required>
+                    <label for="goles_recibidos">Goles Recibidos:</label>
+                    <input type="number" name="goles_recibidos" value="{{ jugador.goles_recibidos }}">
+                    <label for="intercepciones">Intercepciones:</label>
+                    <input type="number" name="intercepciones" value="{{ jugador.intercepciones }}">
+                    <label for="tarjetas_amarillas">Tarjetas Amarillas:</label>
+                    <input type="number" name="tarjetas_amarillas" value="{{ jugador.tarjetas_amarillas }}">
+                    <label for="tarjetas_rojas">Tarjetas Rojas:</label>
+                    <input type="number" name="tarjetas_rojas" value="{{ jugador.tarjetas_rojas }}">
+                    <button type="submit">Actualizar Estadísticas</button>
+                </form>
+                {% else %}
+                <form action="{{ url_for('actualizar_estadisticas_sub18', id=jugador.id) }}" method="POST">
+                    <input type="hidden" name="posicion" value="Jugador">
+                    <label for="partidos_jugados">Partidos Jugados:</label>
+                    <input type="number" name="partidos_jugados" value="{{ jugador.partidos_jugados }}" required>
+                    <label for="goles">Goles:</label>
+                    <input type="number" name="goles" value="{{ jugador.goles }}">
+                    <label for="asistencias">Asistencias:</label>
+                    <input type="number" name="asistencias" value="{{ jugador.asistencias }}">
+                    <label for="goles_sin_penalti">Goles sin Penalti:</label>
+                    <input type="number" name="goles_sin_penalti" value="{{ jugador.goles_sin_penalti }}">
+                    <label for="tarjetas_amarillas">Tarjetas Amarillas:</label>
+                    <input type="number" name="tarjetas_amarillas" value="{{ jugador.tarjetas_amarillas }}">
+                    <label for="tarjetas_rojas">Tarjetas Rojas:</label>
+                    <input type="number" name="tarjetas_rojas" value="{{ jugador.tarjetas_rojas }}">
+                    <button type="submit">Actualizar Estadísticas</button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Columna izquierda con información del jugador y formulario -->
+        <div class="left-column">
+            <img src="{{ url_for('static', filename='uploads/' + jugador.imagen) }}" alt="Foto de {{ jugador.nombre }}" width="150"><br>
+            <p><strong>Documento:</strong> {{ jugador.documento }}</p>
+        <p><strong>Edad:</strong> {{ jugador.edad }}</p>
+        <p><strong>Posición:</strong> {{ jugador.posicion }}</p>
+        <p><strong>Peso:</strong> {{ jugador.peso }} kg</p>
+        <p><strong>Estatura:</strong> {{ jugador.estatura }} cm</p>
+        <p><strong>Tipo documento:</strong> {{ jugador.tipo_documento }} </p><br>
+
+            <h3>Subir Documento</h3>
+            <form action="{{ url_for('jugador_sub18', id=jugador.id) }}" method="POST" enctype="multipart/form-data">
+                <label for="documento">Selecciona un documento PDF:</label>
+                <input type="file" name="documento" id="documento" accept=".pdf" required>
+                <button type="submit">Subir Documento</button>
+            </form>
+            
+             <!-- Lista de documentos -->
+<h3>Documentos Subidos</h3>
+<ul>
+    {% for documento in documentos %}
+        <li>
+            <a href="{{ url_for('descargar_documento', filename=documento.ruta_documento) }}" target="_blank">
+                {{ documento.titulo_documento }}
+                <span class="icon-btn">
+                    <i class="fa fa-download"></i> <!-- Ejemplo usando Font Awesome -->
+                </span>
+            </a>
+        </li>
+    {% else %}
+        <li>No hay documentos subidos.</li>
+    {% endfor %}
+</ul>
+
+
+            <!-- Evaluación de Rendimiento -->
+<!-- Evaluación de Rendimiento -->
+<h2>Rendimiento</h2>
+<div class="rendimiento-container">
+    <div class="rendimiento-circulo" id="rendimiento-circulo"></div>
+    <p class="rendimiento-calificacion">Calificación: <span id="calificacion">{{ rendimiento.calificacion }}</span></p>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const goles = {{ jugador.goles }};
+        const partidosJugados = {{ jugador.partidos_jugados }};
+        const asistencias = {{ jugador.asistencias }};
+    
+        const circulo = document.getElementById('rendimiento-circulo');
+        const calificacionElement = document.getElementById('calificacion');
+    
+        // Calcular el puntaje basado en goles, asistencias y partidos jugados
+        const puntaje = partidosJugados > 0 
+            ? ((goles + asistencias) / partidosJugados) * 2.5
+            : 0;
+    
+        // Ajustar el puntaje para que esté entre 1 y 5
+        const puntajeAjustado = Math.max(1, Math.min(5, puntaje));
+    
+        // Determinar la calificación basada en el puntaje ajustado
+        let calificacion;
+        if (puntajeAjustado >= 4.5) {
+            calificacion = 'Sobresaliente';
+        } else if (puntajeAjustado >= 3.5) {
+            calificacion = 'Muy Bueno';
+        } else if (puntajeAjustado >= 2.5) {
+            calificacion = 'Bueno';
+        } else if (puntajeAjustado >= 1.5) {
+            calificacion = 'Regular';
+        } else {
+            calificacion = 'En Desarrollo';
+        }
+    
+        // Actualizar el texto del puntaje
+        circulo.setAttribute('data-puntaje', puntajeAjustado.toFixed(1) + '/5');
+    
+        // Calcular el ángulo para el relleno del círculo
+        const angulo = (puntajeAjustado / 5) * 360;
+    
+        // Definir color basado en el puntaje (verde para alto, rojo para bajo)
+        const hue = (puntajeAjustado - 1) * 30; // 0 (rojo) a 120 (verde)
+        const color = `hsl(${hue}, 100%, 50%)`;
+    
+        // Aplicar el estilo al círculo
+        circulo.style.setProperty('--angulo', angulo + 'deg');
+        circulo.style.setProperty('--color', color);
+    
+        // Actualizar el texto de la calificación
+        calificacionElement.textContent = calificacion;
+    
+        // Animar el llenado del círculo
+        let currentAngle = 0;
+        const animationDuration = 1000; // 1 segundo
+        const startTime = performance.now();
+    
+        function animateCircle(currentTime) {
+            const elapsedTime = currentTime - startTime;
+            const progress = Math.min(elapsedTime / animationDuration, 1);
+            currentAngle = progress * angulo;
+    
+            circulo.style.setProperty('--angulo', currentAngle + 'deg');
+    
+            if (progress < 1) {
+                requestAnimationFrame(animateCircle);
+            }
+        }
+    
+        requestAnimationFrame(animateCircle);
+    });
+</script>
+</body>
+</html>

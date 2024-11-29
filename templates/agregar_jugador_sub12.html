@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Formulario para agregar jugadores a la categoría Sub12">
+    <title>Agregar Jugador Sub12</title>
+    <style>
+        :root {
+            --primary-color: #2ecc71;
+            --primary-dark: #27ae60;
+            --secondary-color: #3498db;
+            --text-color: #333;
+            --bg-color: #f4f4f4;
+            --white: #ffffff;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --border-radius: 5px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .container {
+            width: min(800px, 95%);
+            margin: 2rem auto;
+            padding: clamp(1rem, 3vw, 2rem);
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        form {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: grid;
+            gap: 0.5rem;
+        }
+
+        label {
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .input-field:focus {
+            border-color: var(--secondary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+
+        select.input-field {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1em;
+            padding-right: 2.5rem;
+        }
+
+        .file-upload {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-upload input[type="file"] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .file-upload-label {
+            display: block;
+            padding: 1rem;
+            background-color: #f9f9f9;
+            border: 2px dashed #ddd;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .file-upload-label:hover {
+            border-color: var(--secondary-color);
+            background-color: #f0f9ff;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .button {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+            text-decoration: none;
+            display: inline-block;
+            border: none;
+            text-align: center;
+        }
+
+        .button-primary {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        .button-secondary {
+            background-color: var(--secondary-color);
+            color: var(--white);
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+
+        .button:active {
+            transform: translateY(0);
+        }
+
+        .error-message {
+            display: none;
+            color: #e74c3c;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        @media (max-width: 600px) {
+            .button-container {
+                flex-direction: column;
+            }
+
+            .button {
+                width: 100%;
+            }
+        }
+
+        /* Estilos para campos inválidos */
+        .input-field:invalid:not(:placeholder-shown) {
+            border-color: #e74c3c;
+        }
+
+        /* Animación de carga */
+        @keyframes loading {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading {
+            position: relative;
+            pointer-events: none;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            width: 1.2em;
+            height: 1.2em;
+            top: 50%;
+            left: 50%;
+            margin: -0.6em 0 0 -0.6em;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            border-right-color: transparent;
+            animation: loading 0.8s infinite linear;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Agregar Jugador Sub12</h1>
+    </header>
+    <div class="container">
+        <form id="jugadorForm" action="{{ url_for('agregar_jugador_sub12') }}" method="POST" enctype="multipart/form-data" novalidate>
+            <div class="form-group">
+                <label for="nombre">Nombre del Jugador</label>
+                <input type="text" id="nombre" name="nombre" class="input-field" required 
+                       pattern="[A-Za-záéíóúñÁÉÍÓÚÑ\s]+" placeholder="Ingrese el nombre completo"
+                       title="Ingrese un nombre válido (solo letras y espacios)">
+                <span class="error-message">Por favor, ingrese un nombre válido</span>
+            </div>
+
+            <div class="form-group">
+                <label for="documento">Documento (número)</label>
+                <input type="number" id="documento" name="documento" class="input-field" required
+                       min="1000000" max="999999999" placeholder="Ingrese el número de documento"
+                       title="Ingrese un número de documento válido">
+                <span class="error-message">Ingrese un número de documento válido</span>
+            </div>
+
+            <div class="form-group">
+                <label for="edad">Edad</label>
+                <input type="number" id="edad" name="edad" class="input-field" required
+                       min="10" max="13" placeholder="Edad entre 10 y 13 años">
+                <span class="error-message">La edad debe estar entre 10 y 13 años</span>
+            </div>
+
+            <div class="form-group">
+                <label for="estatura">Estatura (cm)</label>
+                <input type="number" id="estatura" name="estatura" class="input-field" required
+                       min="120" max="160" placeholder="Estatura entre 120 y 160 cm">
+                <span class="error-message">La estatura debe estar entre 120 y 160 cm</span>
+            </div>
+
+            <div class="form-group">
+                <label for="peso">Peso (kg)</label>
+                <input type="number" id="peso" name="peso" class="input-field" required
+                       min="30" max="60" placeholder="Peso entre 30 y 60 kg">
+                <span class="error-message">El peso debe estar entre 30 y 60 kg</span>
+            </div>
+            
+            <div class="form-group">
+                <label for="tipo_documento">Tipo de Documento</label>
+                <select id="tipo_documento" name="tipo_documento" class="input-field" required>
+                    <option value="">Seleccione tipo de documento</option>
+                    <option value="PEP">PEP</option>
+                    <option value="CC">CC</option>
+                    <option value="TI">TI</option>
+                    <option value="CE">CE</option>
+                </select>
+                <span class="error-message">Seleccione un tipo de documento</span>
+            </div>
+
+            <div class="form-group">
+                <label for="posicion">Posición</label>
+                <select id="posicion" name="posicion" class="input-field" required>
+                    <option value="">Seleccione posición</option>
+                    <option value="Delantero">Delantero</option>
+                    <option value="Medio Campo">Mediocampista</option> 
+                    <option value="Arquero">Arquero</option>
+                    <option value="Defensa">Defensa</option>
+                </select>
+                <span class="error-message">Seleccione una posición</span>
+            </div>
+
+            <div class="form-group">
+                <label for="imagen">Foto del Jugador</label>
+                <div class="file-upload">
+                    <input type="file" id="imagen" name="imagen" accept="image/*" required>
+                    <label for="imagen" class="file-upload-label">
+                        <span id="fileName">Seleccionar archivo</span>
+                    </label>
+                </div>
+                <span class="error-message">Seleccione una imagen</span>
+            </div>
+
+            <div class="button-container">
+                <a href="{{ url_for('sub12') }}" class="button button-secondary">Volver</a>
+                <button type="submit" class="button button-primary">Agregar Jugador</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('jugadorForm');
+            const fileInput = document.getElementById('imagen');
+            const fileLabel = document.getElementById('fileName');
+
+            // Actualizar nombre del archivo seleccionado
+            fileInput.addEventListener('change', function() {
+                fileLabel.textContent = this.files[0] ? this.files[0].name : 'Seleccionar archivo';
+            });
+
+            // Validación del formulario
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                
+                let isValid = true;
+                const errorMessages = form.getElementsByClassName('error-message');
+                
+                // Ocultar todos los mensajes de error previos
+                Array.from(errorMessages).forEach(msg => msg.style.display = 'none');
+
+                // Validar cada campo
+                const validations = {
+                    edad: {
+                        min: 10,
+                        max: 13,
+                        message: "La edad debe estar entre 10 y 13 años para la categoría Sub-12."
+                    },
+                    estatura: {
+                        min: 120,
+                        max: 160,
+                        message: "La estatura debe estar entre 120 cm y 160 cm."
+                    },
+                    peso: {
+                        min: 30,
+                        max: 60,
+                        message: "El peso debe estar entre 30 kg y 60 kg."
+                    }
+                };
+
+                Object.entries(validations).forEach(([field, rules]) => {
+                    const input = document.getElementById(field);
+                    const value = parseInt(input.value);
+                    
+                    if (value < rules.min || value > rules.max) {
+                        isValid = false;
+                        input.nextElementSibling.textContent = rules.message;
+                        input.nextElementSibling.style.display = 'block';
+                    }
+                });
+
+                // Validar campos requeridos
+                const requiredInputs = form.querySelectorAll('[required]');
+                requiredInputs.forEach(input => {
+                    if (!input.value) {
+                        isValid = false;
+                        input.nextElementSibling.style.display = 'block';
+                    }
+                });
+
+                if (isValid) {
+                    // Mostrar animación de carga en el botón
+                    const submitButton = form.querySelector('button[type="submit"]');
+                    submitButton.classList.add('loading');
+                    submitButton.disabled = true;
+                    
+                    // Enviar el formulario
+                    form.submit();
+                }
+            });
+
+            // Validación en tiempo real
+            form.querySelectorAll('.input-field').forEach(input => {
+                input.addEventListener('input', function() {
+                    if (this.checkValidity()) {
+                        this.nextElementSibling.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

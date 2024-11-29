@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Torneos - Troya FC</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Paleta de colores */
+        :root {
+            --color-green: #27ae60; /* Color primario (verde) */
+            --color-light-green: #2ecc71; /* Color secundario (verde más claro) */
+            --color-black: #000000;
+            --color-white: #ffffff;
+            --color-gray: #f4f4f4;
+        }
+
+        /* Estilos generales */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--color-white);
+            color: var(--color-black);
+        }
+
+        /* Estilo para el encabezado */
+        header {
+            background-color: var(--color-black);
+            color: var(--color-white);
+            padding: 20px 10%;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .logo img {
+            height: 120px;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin: 0;
+            color: var(--color-green);
+        }
+
+        /* Estilo para la galería de torneos */
+        .tournaments-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: var(--color-gray);
+        }
+
+        .tournament-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+            background-color: var(--color-white);
+        }
+
+        .tournament-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .tournament-item img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .tournament-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .tournament-content {
+            padding: 15px;
+        }
+
+        .tournament-content h2 {
+            margin: 0 0 10px 0;
+            color: var(--color-black);
+        }
+
+        .tournament-content p {
+            margin: 0;
+            color: #666;
+        }
+
+        /* Estilo para el pie de página */
+        footer {
+            background-color: var(--color-black);
+            color: var(--color-white);
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--color-green);
+            color: var(--color-white);
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 1em;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: var(--color-light-green);
+            transform: translateY(-2px);
+        }
+
+        /* Estilos para la barra de navegación */
+        nav {
+            background-color: var(--color-black);
+            padding: 10px 0;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: var(--color-white);
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: var(--color-green);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="./static/media/que.png" alt="Troya FC Logo">
+        </div>
+        <h1>Torneos</h1>
+    </header>
+
+    <main class="container">
+        <div id="tournamentsGrid" class="tournaments-grid">
+            {% for torneo in torneos %}
+            <div class="tournament-item">
+                <img src="{{ url_for('static', filename='media/' + torneo['imagen']) }}" alt="{{ torneo['titulo'] }}">
+                <div class="tournament-content">
+                    <h2>{{ torneo['titulo'] }}</h2>
+                    <p>{{ torneo['descripcion'] }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </main>
+
+    <footer>
+        <a href="{{ url_for('index') }}" class="btn">Volver al Inicio</a>
+    </footer>
+</body>
+</html>

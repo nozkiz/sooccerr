@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrar Torneos</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #27ae60;
+            --secondary-color: #2ecc71;
+            --text-color: #333;
+            --background-color: #f9f9f9;
+            --white: #ffffff;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .page-title {
+            font-size: 2.5em;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background-color: var(--secondary-color);
+            border-radius: 2px;
+        }
+
+        .form-card {
+            background-color: var(--white);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+            transition: var(--transition);
+        }
+
+        .form-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .form-title {
+            color: var(--primary-color);
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--secondary-color);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.1);
+        }
+
+        .image-upload-container {
+            position: relative;
+            width: 100%;
+            padding: 20px;
+            border: 2px dashed var(--primary-color);
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .image-upload-container:hover {
+            background-color: rgba(39, 174, 96, 0.05);
+        }
+
+        .image-upload-container i {
+            font-size: 40px;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .image-preview-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .image-preview {
+            max-width: 200px;
+            max-height: 200px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            display: none;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .tournament-section {
+            margin-bottom: 40px;
+            background-color: var(--white);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .tournament-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .tournament-header {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .tournament-logo {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid var(--white);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .tournament-logo:hover {
+            transform: scale(1.1);
+        }
+
+        .tournament-title {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .stats-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 20px 0;
+        }
+
+        .stats-table th {
+            background-color: var(--secondary-color);
+            color: var(--white);
+            padding: 15px;
+            font-weight: 600;
+            text-align: left;
+        }
+
+        .stats-table td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .stats-table tr:hover {
+            background-color: rgba(39, 174, 96, 0.05);
+        }
+
+        .eliminar-btn {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .eliminar-btn:hover {
+            background-color: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        .back-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 15px 30px;
+            background-color: #34495e;
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 30px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            z-index: 1000;
+        }
+
+        .back-button:hover {
+            background-color: #2c3e50;
+            transform: translateY(-3px);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 10px;
+            }
+
+            .tournament-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .stats-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="page-title">Administrar Estadisticas de Torneos</h1>
+        
+        <div class="form-card">
+            <h2 class="form-title">Crear Nuevo Torneo</h2>
+            <form method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="nombre">Nombre del Torneo</label>
+                    <input type="text" name="nombre" id="nombre" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="imagen">Logo del Torneo</label>
+                    <div class="image-upload-container" id="upload-container">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Arrastra una imagen o haz clic para seleccionar</p>
+                        <input type="file" name="imagen" id="imagen" accept="image/*" required style="display: none;">
+                    </div>
+                    <div class="image-preview-container">
+                        <img id="preview" class="image-preview" alt="Preview">
+                    </div>
+                </div>
+                
+                <button type="submit" name="add_torneo" class="btn btn-primary">
+                    <i class="fas fa-plus-circle"></i> Agregar Torneo
+                </button>
+            </form>
+        </div>
+
+        <div class="form-card">
+            <h2 class="form-title">Agregar Equipo</h2>
+            <form method="POST">
+                <div class="form-group">
+                    <label for="torneo_id">Seleccionar Torneo</label>
+                    <select name="torneo_id" id="torneo_id" required>
+                        {% for torneo in torneos %}
+                        <option value="{{ torneo.id }}">{{ torneo.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="equipo_nombre">Nombre del Equipo</label>
+                    <input type="text" name="equipo_nombre" id="equipo_nombre" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="puntos">Puntos</label>
+                    <input type="number" name="puntos" id="puntos" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="goles">Goles</label>
+                    <input type="number" name="goles" id="goles" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="goles_recibidos">Goles Recibidos</label>
+                    <input type="number" name="goles_recibidos" id="goles_recibidos" required>
+                </div>
+
+                <button type="submit" name="add_equipo" class="btn btn-primary">
+                    <i class="fas fa-plus-circle"></i> Agregar Equipo
+                </button>
+            </form>
+        </div>
+
+        <h2 class="form-title">Estadísticas de los Torneos</h2>
+        {% for row in estadisticas|groupby('torneo') %}
+            <div class="tournament-section">
+                <div class="tournament-header">
+                    {% if row.list[0].torneo_imagen %}
+                        <img src="{{ row.list[0].torneo_imagen }}" alt="Logo {{ row.grouper }}" class="tournament-logo">
+                    {% endif %}
+                    <div class="tournament-title">
+                        <i class="fas fa-trophy"></i> {{ row.grouper }}
+                    </div>
+                </div>
+                <table class="stats-table">
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-futbol"></i> Equipo</th>
+                            <th><i class="fas fa-star"></i> Puntos</th>
+                            <th><i class="fas fa-futbol"></i> Goles</th>
+                            <th><i class="fas fa-shield-alt"></i> Goles Recibidos</th>
+                            <th><i class="fas fa-cogs"></i> Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in row.list %}
+                            <tr>
+                                <td>{{ item.equipo_nombre }}</td>
+                                <td>{{ item.puntos }}</td>
+                                <td>{{ item.goles }}</td>
+                                <td>{{ item.goles_recibidos }}</td>
+                                <td>
+                                    <form method="POST" style="margin:0; padding:0;">
+                                        <input type="hidden" name="equipo_id" value="{{ item.equipo_id }}">
+                                        <button type="submit" name="delete_equipo" class="eliminar-btn">
+                                            <i class="fas fa-trash-alt"></i> Eliminar
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endfor %}
+
+        <div class="form-card">
+            <h2 class="form-title">Eliminar Torneos</h2>
+            <form method="POST">
+                <div class="form-group">
+                    <label for="torneo_id">Seleccionar Torneo a Eliminar</label>
+                    <select name="torneo_id" id="torneo_id" required>
+                        {% for torneo in torneos %}
+                        <option value="{{ torneo.id }}">{{ torneo.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" name="delete_torneo" class="btn btn-primary">
+                    <i class="fas fa-trash-alt"></i> Eliminar Torneo
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<a href="bienvenido" class="back-button">
+    <i class="fas fa-arrow-left"></i> Volver
+</a>
+
+<script>
+    // Mejorar la previsualización de imagen
+    const uploadContainer = document.getElementById('upload-container');
+    const imageInput = document.getElementById('imagen');
+    const preview = document.getElementById('preview');
+
+    // Abre el selector de archivos al hacer clic en el contenedor
+    uploadContainer.addEventListener('click', () => imageInput.click());
+
+    // Función de arrastrar y soltar con mejoras visuales
+    uploadContainer.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadContainer.style.borderColor = 'var(--secondary-color)';
+        uploadContainer.style.backgroundColor = 'rgba(39, 174, 96, 0.1)';
+    });
+
+    uploadContainer.addEventListener('dragleave', () => {
+        uploadContainer.style.borderColor = 'var(--primary-color)';
+        uploadContainer.style.backgroundColor = 'transparent';
+    });
+
+    uploadContainer.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadContainer.style.borderColor = 'var(--primary-color)';
+        uploadContainer.style.backgroundColor = 'transparent';
+        
+        if (e.dataTransfer.files.length) {
+            imageInput.files = e.dataTransfer.files;
+            updatePreview(e.dataTransfer.files[0]);
+        }
+    });
+
+    // Previsualización de imagen cuando se selecciona un archivo
+    imageInput.addEventListener('change', (e) => {
+        if (e.target.files.length) {
+            updatePreview(e.target.files[0]);
+        }
+    });
+
+    // Función para actualizar la vista previa
+    function updatePreview(file) {
+        if (!file.type.startsWith('image/')) {
+            alert('Por favor, selecciona un archivo de imagen válido.');
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            preview.src = e.target.result;
+            preview.style.display = 'block';
+            
+            // Animación de entrada para la imagen de vista previa
+            preview.style.opacity = '0';
+            preview.style.transform = 'scale(0.8)';
+            setTimeout(() => {
+                preview.style.transition = 'all 0.3s ease';
+                preview.style.opacity = '1';
+                preview.style.transform = 'scale(1)';
+            }, 10);
+        };
+        reader.readAsDataURL(file);
+    }
+</script>
+</body>
+</html>
